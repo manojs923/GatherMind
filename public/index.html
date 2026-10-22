@@ -86,9 +86,9 @@
     <!-- TOP NAVIGATION BAR -->
     <header class="border-b border-slate-800 bg-navy-800/80 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.showPage('setup')">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.showPage('setup')" role="button" tabindex="0" aria-label="Go to GatherMind Event Planner Setup">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-between p-2 shadow-lg glow-effect">
-                    <i class="fa-solid fa-wand-magic-sparkles text-white text-lg m-auto"></i>
+                    <i class="fa-solid fa-wand-magic-sparkles text-white text-lg m-auto" aria-hidden="true"></i>
                 </div>
                 <div>
                     <span class="text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-cyan-400 bg-clip-text text-transparent">GatherMind</span>
@@ -97,8 +97,8 @@
 
             <!-- Header Actions -->
             <div class="flex items-center space-x-3">
-                <button id="nav-dashboard-btn" onclick="app.showPage('dashboard')" class="hidden text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition shadow-sm">
-                    <i class="fa-solid fa-chart-pie"></i>
+                <button id="nav-dashboard-btn" onclick="app.showPage('dashboard')" aria-label="View Current Master Plan" class="hidden text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition shadow-sm">
+                    <i class="fa-solid fa-chart-pie" aria-hidden="true"></i>
                     <span>View Plan</span>
                 </button>
             </div>
@@ -130,24 +130,24 @@
                     <span class="text-xs text-slate-500">Click to populate form</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <button type="button" onclick="app.loadPreset('wedding')" class="group p-3 rounded-xl border border-slate-700/60 bg-navy-900/60 hover:bg-indigo-950/40 hover:border-indigo-500/50 text-left transition duration-200">
+                    <button type="button" onclick="app.loadPreset('wedding')" aria-label="Load Grand Wedding preset with $45,000 budget for 150 guests" class="group p-3 rounded-xl border border-slate-700/60 bg-navy-900/60 hover:bg-indigo-950/40 hover:border-indigo-500/50 text-left transition duration-200">
                         <div class="font-semibold text-sm text-slate-200 group-hover:text-indigo-300 flex items-center justify-between">
                             <span>🏰 Grand Wedding</span>
-                            <i class="fa-solid fa-heart text-xs text-rose-400"></i>
+                            <i class="fa-solid fa-heart text-xs text-rose-400" aria-hidden="true"></i>
                         </div>
                         <div class="text-xs text-slate-400 mt-1">$45,000 • 150 Guests • Elegant</div>
                     </button>
-                    <button type="button" onclick="app.loadPreset('birthday')" class="group p-3 rounded-xl border border-slate-700/60 bg-navy-900/60 hover:bg-indigo-950/40 hover:border-indigo-500/50 text-left transition duration-200">
+                    <button type="button" onclick="app.loadPreset('birthday')" aria-label="Load 30th Birthday Party preset with $6,500 budget for 40 guests" class="group p-3 rounded-xl border border-slate-700/60 bg-navy-900/60 hover:bg-indigo-950/40 hover:border-indigo-500/50 text-left transition duration-200">
                         <div class="font-semibold text-sm text-slate-200 group-hover:text-indigo-300 flex items-center justify-between">
                             <span>🎂 30th Birthday Party</span>
-                            <i class="fa-solid fa-cake-candles text-xs text-amber-400"></i>
+                            <i class="fa-solid fa-cake-candles text-xs text-amber-400" aria-hidden="true"></i>
                         </div>
                         <div class="text-xs text-slate-400 mt-1">$6,500 • 40 Guests • Retro Synthwave</div>
                     </button>
-                    <button type="button" onclick="app.loadPreset('foodfest')" class="group p-3 rounded-xl border border-slate-700/60 bg-navy-900/60 hover:bg-indigo-950/40 hover:border-indigo-500/50 text-left transition duration-200">
+                    <button type="button" onclick="app.loadPreset('foodfest')" aria-label="Load Community Food Fest preset with $18,000 budget for 500 guests" class="group p-3 rounded-xl border border-slate-700/60 bg-navy-900/60 hover:bg-indigo-950/40 hover:border-indigo-500/50 text-left transition duration-200">
                         <div class="font-semibold text-sm text-slate-200 group-hover:text-indigo-300 flex items-center justify-between">
                             <span>🎪 Community Food Fest</span>
-                            <i class="fa-solid fa-utensils text-xs text-emerald-400"></i>
+                            <i class="fa-solid fa-utensils text-xs text-emerald-400" aria-hidden="true"></i>
                         </div>
                         <div class="text-xs text-slate-400 mt-1">$18,000 • 500 Guests • Vibrant</div>
                     </button>
@@ -160,7 +160,7 @@
                     
                     <!-- Event Type -->
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Event Type</label>
+                        <label for="field-type" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Event Type</label>
                         <select id="field-type" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
                             <option value="Wedding">Wedding</option>
                             <option value="Birthday Party">Birthday Party</option>
@@ -173,33 +173,33 @@
 
                     <!-- Event Name -->
                     <div class="sm:col-span-2">
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Event Title</label>
+                        <label for="field-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Event Title</label>
                         <input type="text" id="field-name" required placeholder="e.g. Sophia &amp; Liam's Sunset Celebration" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
                     </div>
 
                     <!-- Date -->
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Event Date</label>
+                        <label for="field-date" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Event Date</label>
                         <input type="date" id="field-date" required onclick="this.showPicker && this.showPicker()" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 cursor-pointer">
                     </div>
 
                     <!-- Location -->
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Location / City</label>
+                        <label for="field-location" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Location / City</label>
                         <input type="text" id="field-location" required placeholder="e.g. Napa Valley, CA" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
                     </div>
 
                     <!-- Guest Count -->
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Guest Count</label>
+                        <label for="field-guests" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Guest Count</label>
                         <input type="number" id="field-guests" min="1" required placeholder="120" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
                     </div>
 
                     <!-- Budget & Currency -->
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Total Budget</label>
+                        <label for="field-budget" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Total Budget</label>
                         <div class="flex space-x-2">
-                            <select id="field-currency" class="w-24 bg-navy-900 border border-slate-700 rounded-xl px-2.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <select id="field-currency" aria-label="Budget Currency" class="w-24 bg-navy-900 border border-slate-700 rounded-xl px-2.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
                                 <option value="USD">USD ($)</option>
                                 <option value="INR">INR (₹)</option>
                                 <option value="EUR">EUR (€)</option>
@@ -212,7 +212,7 @@
 
                     <!-- Language -->
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Plan Language</label>
+                        <label for="field-language" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Plan Language</label>
                         <select id="field-language" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
                             <option value="English">English</option>
                             <option value="Spanish">Spanish</option>
@@ -224,7 +224,7 @@
 
                     <!-- Style / Vibe -->
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Style &amp; Vibe</label>
+                        <label for="field-vibe" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Style &amp; Vibe</label>
                         <input type="text" id="field-vibe" placeholder="e.g. Boho Chic, Minimalist, High-Tech" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
                     </div>
 
@@ -232,20 +232,20 @@
 
                 <!-- Priorities -->
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Key Focus Priorities</label>
+                    <label for="field-priorities" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Key Focus Priorities</label>
                     <input type="text" id="field-priorities" placeholder="e.g. Organic Gourmet Catering, Live Jazz Band, Immersive Lighting" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
                 </div>
 
                 <!-- AI Mode Selector & Submit -->
                 <div class="pt-4 border-t border-slate-700/70 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div class="flex items-center space-x-2 text-xs text-slate-400 cursor-pointer hover:text-slate-200 transition" onclick="app.openApiKeyModal()" title="Click to manage Gemini API Key">
-                        <span id="ai-mode-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <div class="flex items-center space-x-2 text-xs text-slate-400 cursor-pointer hover:text-slate-200 transition" onclick="app.openApiKeyModal()" role="button" tabindex="0" aria-label="Manage Gemini API Key Settings" title="Click to manage Gemini API Key">
+                        <span id="ai-mode-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true"></span>
                         <span id="ai-mode-label">Mode: Simulated AI Generation (Fast &amp; Free)</span>
-                        <i class="fa-solid fa-pen-to-square text-[11px] text-slate-500 hover:text-indigo-400 ml-1"></i>
+                        <i class="fa-solid fa-pen-to-square text-[11px] text-slate-500 hover:text-indigo-400 ml-1" aria-hidden="true"></i>
                     </div>
 
-                    <button type="submit" id="generate-btn" class="w-full sm:w-auto bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg glow-effect flex items-center justify-center space-x-2 transition transform active:scale-95">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <button type="submit" id="generate-btn" aria-label="Generate Master Event Plan" class="w-full sm:w-auto bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg glow-effect flex items-center justify-center space-x-2 transition transform active:scale-95">
+                        <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
                         <span>Generate Master Plan</span>
                     </button>
                 </div>
@@ -271,16 +271,16 @@
                     </div>
 
                     <div class="flex items-center space-x-2 no-print">
-                        <button onclick="app.exportJson()" class="px-3 py-2 bg-navy-900 hover:bg-navy-700 text-slate-300 border border-slate-700 rounded-xl text-xs flex items-center space-x-1.5 transition">
-                            <i class="fa-solid fa-download"></i>
+                        <button onclick="app.exportJson()" aria-label="Export plan as JSON file" class="px-3 py-2 bg-navy-900 hover:bg-navy-700 text-slate-300 border border-slate-700 rounded-xl text-xs flex items-center space-x-1.5 transition">
+                            <i class="fa-solid fa-download" aria-hidden="true"></i>
                             <span>Export JSON</span>
                         </button>
-                        <button onclick="window.print()" class="px-3 py-2 bg-navy-900 hover:bg-navy-700 text-slate-300 border border-slate-700 rounded-xl text-xs flex items-center space-x-1.5 transition">
-                            <i class="fa-solid fa-print"></i>
+                        <button onclick="window.print()" aria-label="Print event plan or save as PDF" class="px-3 py-2 bg-navy-900 hover:bg-navy-700 text-slate-300 border border-slate-700 rounded-xl text-xs flex items-center space-x-1.5 transition">
+                            <i class="fa-solid fa-print" aria-hidden="true"></i>
                             <span>Print / PDF</span>
                         </button>
-                        <button onclick="app.resetPlan()" class="px-3 py-2 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/60 rounded-xl text-xs flex items-center space-x-1.5 transition">
-                            <i class="fa-solid fa-rotate-left"></i>
+                        <button onclick="app.resetPlan()" aria-label="Reset and design a new event plan" class="px-3 py-2 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/60 rounded-xl text-xs flex items-center space-x-1.5 transition">
+                            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
                             <span>Reset</span>
                         </button>
                     </div>
@@ -303,7 +303,7 @@
                     <div class="bg-navy-900/60 p-3.5 rounded-xl border border-slate-800">
                         <div class="text-xs text-slate-400 font-medium">Task Progress</div>
                         <div class="flex items-center space-x-2 mt-1">
-                            <div class="flex-grow bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                            <div class="flex-grow bg-slate-800 h-2.5 rounded-full overflow-hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar-container">
                                 <div id="metric-progress-bar" class="bg-emerald-400 h-full w-0 transition-all duration-500"></div>
                             </div>
                             <span id="metric-progress-text" class="text-xs font-bold text-emerald-400">0%</span>
@@ -313,21 +313,21 @@
             </div>
 
             <!-- Tabbed Navigation Bar -->
-            <div class="border-b border-slate-800 flex space-x-2 sm:space-x-6 overflow-x-auto no-print">
-                <button onclick="app.switchTab('overview')" id="tab-btn-overview" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-indigo-500 text-indigo-400 whitespace-nowrap">
-                    <i class="fa-solid fa-compass mr-1.5"></i> Overview
+            <div class="border-b border-slate-800 flex space-x-2 sm:space-x-6 overflow-x-auto no-print" role="tablist" aria-label="Event Plan Views">
+                <button onclick="app.switchTab('overview')" id="tab-btn-overview" role="tab" aria-selected="true" aria-controls="tab-overview" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-indigo-500 text-indigo-400 whitespace-nowrap">
+                    <i class="fa-solid fa-compass mr-1.5" aria-hidden="true"></i> Overview
                 </button>
-                <button onclick="app.switchTab('budget')" id="tab-btn-budget" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
-                    <i class="fa-solid fa-calculator mr-1.5"></i> Budget Allocation
+                <button onclick="app.switchTab('budget')" id="tab-btn-budget" role="tab" aria-selected="false" aria-controls="tab-budget" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i class="fa-solid fa-calculator mr-1.5" aria-hidden="true"></i> Budget Allocation
                 </button>
-                <button onclick="app.switchTab('timeline')" id="tab-btn-timeline" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
-                    <i class="fa-solid fa-list-check mr-1.5"></i> Timeline &amp; Tasks
+                <button onclick="app.switchTab('timeline')" id="tab-btn-timeline" role="tab" aria-selected="false" aria-controls="tab-timeline" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i class="fa-solid fa-list-check mr-1.5" aria-hidden="true"></i> Timeline &amp; Tasks
                 </button>
-                <button onclick="app.switchTab('vendors')" id="tab-btn-vendors" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
-                    <i class="fa-solid fa-clipboard-question mr-1.5"></i> Vendor Checklists
+                <button onclick="app.switchTab('vendors')" id="tab-btn-vendors" role="tab" aria-selected="false" aria-controls="tab-vendors" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i class="fa-solid fa-clipboard-question mr-1.5" aria-hidden="true"></i> Vendor Checklists
                 </button>
-                <button onclick="app.switchTab('ideas')" id="tab-btn-ideas" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
-                    <i class="fa-solid fa-lightbulb mr-1.5"></i> Creative Ideation
+                <button onclick="app.switchTab('ideas')" id="tab-btn-ideas" role="tab" aria-selected="false" aria-controls="tab-ideas" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i class="fa-solid fa-lightbulb mr-1.5" aria-hidden="true"></i> Creative Ideation
                 </button>
             </div>
 
@@ -441,12 +441,13 @@
     <div id="refinement-bar" class="hidden fixed bottom-4 inset-x-4 max-w-4xl mx-auto z-40 no-print">
         <form onsubmit="app.handleRefineSubmit(event)" class="bg-navy-800/95 border border-indigo-500/50 rounded-2xl p-2.5 sm:p-3 shadow-2xl backdrop-blur-md flex items-center space-x-2 glow-effect">
             <div class="pl-2 text-indigo-400">
-                <i class="fa-solid fa-sparkles text-lg"></i>
+                <i class="fa-solid fa-sparkles text-lg" aria-hidden="true"></i>
             </div>
-            <input type="text" id="refine-input" placeholder="Refine plan... e.g. 'Make it 15% cheaper', 'Focus more on live music', 'Add vegan options'" class="flex-grow bg-transparent border-none text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none px-2">
-            <button type="submit" id="refine-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5 whitespace-nowrap">
+            <label for="refine-input" class="sr-only">Refine Event Plan Prompt</label>
+            <input type="text" id="refine-input" aria-label="Refine plan prompt" placeholder="Refine plan... e.g. 'Make it 15% cheaper', 'Focus more on live music', 'Add vegan options'" class="flex-grow bg-transparent border-none text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none px-2">
+            <button type="submit" id="refine-btn" aria-label="Submit Plan Refinement" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5 whitespace-nowrap">
                 <span>Refine Plan</span>
-                <i class="fa-solid fa-arrow-up"></i>
+                <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
             </button>
         </form>
     </div>
@@ -457,25 +458,25 @@
     </footer>
 
     <!-- API KEY MODAL -->
-    <div id="api-key-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div id="api-key-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-navy-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between">
-                <h3 class="text-base font-bold text-white flex items-center space-x-2">
-                    <i class="fa-solid fa-key text-yellow-400"></i>
+                <h3 id="modal-title" class="text-base font-bold text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-key text-yellow-400" aria-hidden="true"></i>
                     <span>Gemini API Key Settings</span>
                 </h3>
-                <button onclick="app.closeApiKeyModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="app.closeApiKeyModal()" aria-label="Close API Key Settings Modal" class="text-slate-400 hover:text-white p-1 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500"><i class="fa-solid fa-xmark text-base" aria-hidden="true"></i></button>
             </div>
             <p class="text-xs text-slate-300 leading-relaxed">
                 Provide a Google Gemini API key to generate live AI plans. If left blank, GatherMind defaults to instant simulated AI generation.
             </p>
             <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1">API Key</label>
-                <input type="password" id="modal-api-key-input" placeholder="AIzaSy..." class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                <label for="modal-api-key-input" class="block text-xs font-semibold text-slate-400 mb-1">API Key</label>
+                <input type="password" id="modal-api-key-input" aria-label="Google Gemini API Key" placeholder="AIzaSy..." class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
             </div>
             <div class="flex justify-end space-x-2 pt-2">
-                <button onclick="app.clearApiKey()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-xs text-white rounded-xl">Clear Key</button>
-                <button onclick="app.saveApiKey()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-xs text-white font-semibold rounded-xl">Save &amp; Use Key</button>
+                <button onclick="app.clearApiKey()" aria-label="Clear Saved API Key" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-xs text-white rounded-xl">Clear Key</button>
+                <button onclick="app.saveApiKey()" aria-label="Save and Use API Key" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-xs text-white font-semibold rounded-xl">Save &amp; Use Key</button>
             </div>
         </div>
     </div>
@@ -533,6 +534,7 @@
                 document.querySelectorAll('.tab-btn').forEach(btn => {
                     btn.classList.remove('border-indigo-500', 'text-indigo-400');
                     btn.classList.add('border-transparent', 'text-slate-400');
+                    btn.setAttribute('aria-selected', 'false');
                 });
 
                 document.getElementById(`tab-${tabId}`).classList.remove('hidden');
@@ -540,6 +542,7 @@
                 if(activeBtn) {
                     activeBtn.classList.add('border-indigo-500', 'text-indigo-400');
                     activeBtn.classList.remove('border-transparent', 'text-slate-400');
+                    activeBtn.setAttribute('aria-selected', 'true');
                 }
             },
 
@@ -1069,7 +1072,7 @@
                                     <span id="cat-wt-${index}" class="text-slate-400">Weight: ${item.weight}</span>
                                 </div>
                             </div>
-                            <input type="range" min="1" max="100" value="${item.weight}" oninput="app.updateCategoryWeight(${index}, this.value)" class="w-full accent-indigo-500 bg-slate-800 rounded-lg cursor-pointer h-2">
+                            <input type="range" min="1" max="100" value="${item.weight}" oninput="app.updateCategoryWeight(${index}, this.value)" aria-label="${item.name} budget allocation weight" class="w-full accent-indigo-500 bg-slate-800 rounded-lg cursor-pointer h-2">
                         </div>
                     `;
                 }).join('');
@@ -1130,7 +1133,7 @@
                             </div>
                             <p class="text-xs sm:text-sm text-slate-200 ${item.done ? 'line-through text-slate-500' : ''}">${item.task}</p>
                         </div>
-                        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="app.toggleTask(${idx})" class="w-5 h-5 accent-indigo-500 rounded border-slate-700 bg-navy-900 cursor-pointer">
+                        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="app.toggleTask(${idx})" aria-label="Mark completed: ${item.task}" class="w-5 h-5 accent-indigo-500 rounded border-slate-700 bg-navy-900 cursor-pointer">
                     </div>
                 `).join('');
             },
@@ -1148,19 +1151,19 @@
                 container.innerHTML = this.currentPlan.vendorQuestions.map((vGroup, gIdx) => `
                     <div class="bg-navy-900/60 p-5 rounded-xl border border-slate-800 space-y-3">
                         <h4 class="text-sm font-bold text-indigo-300 flex items-center space-x-2">
-                            <i class="fa-solid fa-clipboard-check"></i>
+                            <i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
                             <span>${vGroup.category}</span>
                         </h4>
                         <div class="space-y-2">
                             ${vGroup.questions.map((q, qIdx) => `
                                 <label class="flex items-start space-x-2.5 cursor-pointer">
-                                    <input type="checkbox" ${q.checked ? 'checked' : ''} onchange="app.toggleVendorQuestion(${gIdx}, ${qIdx})" class="mt-0.5 w-4 h-4 accent-indigo-500 rounded border-slate-700 bg-navy-900">
+                                    <input type="checkbox" ${q.checked ? 'checked' : ''} onchange="app.toggleVendorQuestion(${gIdx}, ${qIdx})" aria-label="Checklist item: ${q.text}" class="mt-0.5 w-4 h-4 accent-indigo-500 rounded border-slate-700 bg-navy-900">
                                     <span class="text-xs text-slate-300 ${q.checked ? 'line-through text-slate-500' : ''}">${q.text}</span>
                                 </label>
                             `).join('')}
                         </div>
                         <div class="pt-2">
-                            <textarea placeholder="Add custom vendor notes..." oninput="app.updateVendorNotes(${gIdx}, this.value)" class="w-full bg-navy-800 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">${vGroup.notes || ''}</textarea>
+                            <textarea placeholder="Add custom vendor notes..." aria-label="Custom notes for ${vGroup.category}" oninput="app.updateVendorNotes(${gIdx}, this.value)" class="w-full bg-navy-800 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">${vGroup.notes || ''}</textarea>
                         </div>
                     </div>
                 `).join('');

@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GatherMind AI Event Planner</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            900: '#0b0f19',
+                            800: '#0f172a',
+                            700: '#1e293b',
+                            600: '#334155'
+                        },
+                        indigo: {
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca'
+                        },
+                        cyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0f19;
+            color: #f8fafc;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        /* Print Stylesheet */
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            .bg-navy-800, .bg-navy-700, .bg-navy-900 { background: white !important; border: 1px solid #ccc !important; color: black !important; }
+            .text-white, .text-gray-200, .text-gray-300, .text-gray-400 { color: black !important; }
+            .shadow-xl, .shadow-2xl, .shadow-lg { box-shadow: none !important; }
+        }
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.25);
+        }
+        .glow-effect-cyan {
+            box-shadow: 0 0 25px -5px rgba(34, 211, 238, 0.25);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="border-b border-slate-800 bg-navy-800/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="app.showPage('setup')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 flex items-center justify-between p-2 shadow-lg glow-effect">
+                    <i class="fa-solid fa-wand-magic-sparkles text-white text-lg m-auto"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-cyan-400 bg-clip-text text-transparent">GatherMind</span>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center space-x-3">
+                <button id="nav-dashboard-btn" onclick="app.showPage('dashboard')" class="hidden text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition shadow-sm">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>View Plan</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ================= PAGE 1: EVENT SETUP FORM ================= -->
+        <section id="page-setup" class="max-w-4xl mx-auto space-y-8 animate-fade-in">
+            <!-- Hero Title -->
+            <div class="text-center space-y-3 pt-4">
+                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-indigo-300 bg-clip-text text-transparent">
+                    Intelligent Event Architecture
+                </h1>
+                <p class="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+                    Design custom, budget-perfect events powered by Gemini AI &amp; deterministic financial allocation.
+                </p>
+            </div>
+
+            <!-- Quick Presets -->
+            <div class="bg-navy-800/50 border border-slate-800 rounded-2xl p-4 sm:p-6 backdrop-blur">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-indigo-400 flex items-center space-x-1.5">
+                        <i class="fa-solid fa-bolt text-yellow-400"></i>
+                        <span>Instant Quick-Fill Presets</span>
+                    </span>
+                    <span class="text-xs text-slate-500">Click to populate form</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <button type="button" onclick="app.loadPreset('wedding')" class="group p-3 rounded-xl border border-slate-700/60 bg-navy-900/60 hover:bg-indigo-950/40 hover:border-indigo-500/50 text-left transition duration-200">
+                        <div class="font-semibold text-sm text-slate-200 group-hover:text-indigo-300 flex items-center justify-between">
+                            <span>🏰 Grand Wedding</span>
+                            <i class="fa-solid fa-heart text-xs text-rose-400"></i>
+                        </div>
+                        <div class="text-xs text-slate-400 mt-1">$45,000 • 150 Guests • Elegant</div>
+                    </button>
+                    <button type="button" onclick="app.loadPreset('birthday')" class="group p-3 rounded-xl border border-slate-700/60 bg-navy-900/60 hover:bg-indigo-950/40 hover:border-indigo-500/50 text-left transition duration-200">
+                        <div class="font-semibold text-sm text-slate-200 group-hover:text-indigo-300 flex items-center justify-between">
+                            <span>🎂 30th Birthday Party</span>
+                            <i class="fa-solid fa-cake-candles text-xs text-amber-400"></i>
+                        </div>
+                        <div class="text-xs text-slate-400 mt-1">$6,500 • 40 Guests • Retro Synthwave</div>
+                    </button>
+                    <button type="button" onclick="app.loadPreset('foodfest')" class="group p-3 rounded-xl border border-slate-700/60 bg-navy-900/60 hover:bg-indigo-950/40 hover:border-indigo-500/50 text-left transition duration-200">
+                        <div class="font-semibold text-sm text-slate-200 group-hover:text-indigo-300 flex items-center justify-between">
+                            <span>🎪 Community Food Fest</span>
+                            <i class="fa-solid fa-utensils text-xs text-emerald-400"></i>
+                        </div>
+                        <div class="text-xs text-slate-400 mt-1">$18,000 • 500 Guests • Vibrant</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form id="event-form" onsubmit="app.handleFormSubmit(event)" class="bg-navy-800/80 border border-slate-700/80 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Event Type -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Event Type</label>
+                        <select id="field-type" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                            <option value="Wedding">Wedding</option>
+                            <option value="Birthday Party">Birthday Party</option>
+                            <option value="Community Festival">Community Festival</option>
+                            <option value="Corporate Gala">Corporate Gala</option>
+                            <option value="Baby Shower">Baby Shower</option>
+                            <option value="Product Launch">Product Launch</option>
+                        </select>
+                    </div>
+
+                    <!-- Event Name -->
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Event Title</label>
+                        <input type="text" id="field-name" required placeholder="e.g. Sophia &amp; Liam's Sunset Celebration" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                    </div>
+
+                    <!-- Date -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Event Date</label>
+                        <input type="date" id="field-date" required class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                    </div>
+
+                    <!-- Location -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Location / City</label>
+                        <input type="text" id="field-location" required placeholder="e.g. Napa Valley, CA" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                    </div>
+
+                    <!-- Guest Count -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Guest Count</label>
+                        <input type="number" id="field-guests" min="1" required placeholder="120" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                    </div>
+
+                    <!-- Budget & Currency -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Total Budget</label>
+                        <div class="flex space-x-2">
+                            <select id="field-currency" class="w-24 bg-navy-900 border border-slate-700 rounded-xl px-2.5 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                                <option value="USD">USD ($)</option>
+                                <option value="INR">INR (₹)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                                <option value="AED">AED (AED)</option>
+                            </select>
+                            <input type="number" id="field-budget" min="100" required placeholder="30000" class="flex-grow bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+
+                    <!-- Language -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Plan Language</label>
+                        <select id="field-language" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <option value="English">English</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="French">French</option>
+                            <option value="German">German</option>
+                            <option value="Hindi">Hindi</option>
+                        </select>
+                    </div>
+
+                    <!-- Style / Vibe -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Style &amp; Vibe</label>
+                        <input type="text" id="field-vibe" placeholder="e.g. Boho Chic, Minimalist, High-Tech" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                    </div>
+
+                </div>
+
+                <!-- Priorities -->
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Key Focus Priorities</label>
+                    <input type="text" id="field-priorities" placeholder="e.g. Organic Gourmet Catering, Live Jazz Band, Immersive Lighting" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <!-- AI Mode Selector & Submit -->
+                <div class="pt-4 border-t border-slate-700/70 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div class="flex items-center space-x-2 text-xs text-slate-400">
+                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span id="ai-mode-label">Mode: Simulated AI Generation (Fast &amp; Free)</span>
+                    </div>
+
+                    <button type="submit" id="generate-btn" class="w-full sm:w-auto bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg glow-effect flex items-center justify-center space-x-2 transition transform active:scale-95">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Generate Master Plan</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================= PAGE 2: INTERACTIVE DASHBOARD ================= -->
+        <section id="page-dashboard" class="hidden space-y-6">
+            
+            <!-- Dashboard Top Banner / Overview Summary -->
+            <div class="bg-navy-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+                    <div>
+                        <div class="flex items-center space-x-3">
+                            <span id="dash-type-badge" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-indigo-950 text-indigo-300 border border-indigo-800">Wedding</span>
+                            <span id="dash-date" class="text-xs text-slate-400"><i class="fa-regular fa-calendar mr-1"></i> Oct 24, 2026</span>
+                            <span id="dash-location" class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i> Napa Valley</span>
+                        </div>
+                        <h2 id="dash-title" class="text-2xl sm:text-3xl font-extrabold text-white mt-2">Sophia &amp; Liam's Sunset Celebration</h2>
+                        <p id="dash-vibe" class="text-xs sm:text-sm text-cyan-300 mt-1">Style: Rustic Boho Chic</p>
+                    </div>
+
+                    <div class="flex items-center space-x-2 no-print">
+                        <button onclick="app.exportJson()" class="px-3 py-2 bg-navy-900 hover:bg-navy-700 text-slate-300 border border-slate-700 rounded-xl text-xs flex items-center space-x-1.5 transition">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Export JSON</span>
+                        </button>
+                        <button onclick="window.print()" class="px-3 py-2 bg-navy-900 hover:bg-navy-700 text-slate-300 border border-slate-700 rounded-xl text-xs flex items-center space-x-1.5 transition">
+                            <i class="fa-solid fa-print"></i>
+                            <span>Print / PDF</span>
+                        </button>
+                        <button onclick="app.resetPlan()" class="px-3 py-2 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/60 rounded-xl text-xs flex items-center space-x-1.5 transition">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>Reset</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- High-Level Metrics -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-700/60">
+                    <div class="bg-navy-900/60 p-3.5 rounded-xl border border-slate-800">
+                        <div class="text-xs text-slate-400 font-medium">Total Budget</div>
+                        <div id="metric-budget" class="text-xl font-bold text-white mt-1">$45,000</div>
+                    </div>
+                    <div class="bg-navy-900/60 p-3.5 rounded-xl border border-slate-800">
+                        <div class="text-xs text-slate-400 font-medium">Cost / Guest</div>
+                        <div id="metric-cost-per-guest" class="text-xl font-bold text-cyan-400 mt-1">$300</div>
+                    </div>
+                    <div class="bg-navy-900/60 p-3.5 rounded-xl border border-slate-800">
+                        <div class="text-xs text-slate-400 font-medium">Days Remaining</div>
+                        <div id="metric-days-left" class="text-xl font-bold text-indigo-400 mt-1">120 Days</div>
+                    </div>
+                    <div class="bg-navy-900/60 p-3.5 rounded-xl border border-slate-800">
+                        <div class="text-xs text-slate-400 font-medium">Task Progress</div>
+                        <div class="flex items-center space-x-2 mt-1">
+                            <div class="flex-grow bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                <div id="metric-progress-bar" class="bg-emerald-400 h-full w-0 transition-all duration-500"></div>
+                            </div>
+                            <span id="metric-progress-text" class="text-xs font-bold text-emerald-400">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabbed Navigation Bar -->
+            <div class="border-b border-slate-800 flex space-x-2 sm:space-x-6 overflow-x-auto no-print">
+                <button onclick="app.switchTab('overview')" id="tab-btn-overview" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-indigo-500 text-indigo-400 whitespace-nowrap">
+                    <i class="fa-solid fa-compass mr-1.5"></i> Overview
+                </button>
+                <button onclick="app.switchTab('budget')" id="tab-btn-budget" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i class="fa-solid fa-calculator mr-1.5"></i> Budget Allocation
+                </button>
+                <button onclick="app.switchTab('timeline')" id="tab-btn-timeline" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i class="fa-solid fa-list-check mr-1.5"></i> Timeline &amp; Tasks
+                </button>
+                <button onclick="app.switchTab('vendors')" id="tab-btn-vendors" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i class="fa-solid fa-clipboard-question mr-1.5"></i> Vendor Checklists
+                </button>
+                <button onclick="app.switchTab('ideas')" id="tab-btn-ideas" class="tab-btn pb-3 px-2 text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 whitespace-nowrap">
+                    <i class="fa-solid fa-lightbulb mr-1.5"></i> Creative Ideation
+                </button>
+            </div>
+
+            <!-- TAB 1: OVERVIEW -->
+            <div id="tab-overview" class="tab-content space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- AI Executive Summary -->
+                    <div class="md:col-span-2 bg-navy-800/80 border border-slate-700/70 rounded-2xl p-6">
+                        <h3 class="text-base font-bold text-white flex items-center space-x-2 mb-3">
+                            <i class="fa-solid fa-align-left text-indigo-400"></i>
+                            <span>Executive Planning Summary</span>
+                        </h3>
+                        <p id="summary-text" class="text-slate-300 text-sm leading-relaxed whitespace-pre-line"></p>
+                    </div>
+
+                    <!-- Quick Focus Priorities -->
+                    <div class="bg-navy-800/80 border border-slate-700/70 rounded-2xl p-6">
+                        <h3 class="text-base font-bold text-white flex items-center space-x-2 mb-3">
+                            <i class="fa-solid fa-bullseye text-cyan-400"></i>
+                            <span>Priorities &amp; Tone</span>
+                        </h3>
+                        <div id="priorities-container" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- High Level Budget Quick Preview -->
+                <div class="bg-navy-800/80 border border-slate-700/70 rounded-2xl p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-base font-bold text-white flex items-center space-x-2">
+                            <i class="fa-solid fa-chart-bar text-emerald-400"></i>
+                            <span>Budget Allocation Preview</span>
+                        </h3>
+                        <button onclick="app.switchTab('budget')" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium">Adjust Weights &rarr;</button>
+                    </div>
+                    <div id="overview-budget-bars" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- TAB 2: BUDGET BREAKDOWN & LARGEST REMAINDER ALLOCATION -->
+            <div id="tab-budget" class="tab-content hidden space-y-6">
+                <div class="bg-navy-800/80 border border-slate-700/70 rounded-2xl p-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-scale-balanced text-indigo-400"></i>
+                                <span>Deterministic Budget Normalization Engine</span>
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1">
+                                Adjust relative weights below. GatherMind uses the <b>Largest Remainder Method</b> to compute zero-rounding error exact integer currency allocations.
+                            </p>
+                        </div>
+                        <div class="bg-indigo-950 border border-indigo-800 text-indigo-300 px-3 py-1.5 rounded-xl text-xs font-mono font-bold">
+                            Allocated Total: <span id="budget-sum-check">$0</span>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Weight Sliders & Live Amounts -->
+                    <div id="budget-sliders-container" class="space-y-5"></div>
+                </div>
+
+                <!-- Saving Tips Per Category -->
+                <div class="bg-navy-800/80 border border-slate-700/70 rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white flex items-center space-x-2 mb-4">
+                        <i class="fa-solid fa-piggy-bank text-emerald-400"></i>
+                        <span>AI Cost Optimization &amp; Savings Tips</span>
+                    </h3>
+                    <div id="saving-tips-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+            </div>
+
+            <!-- TAB 3: TIMELINE & MILESTONES -->
+            <div id="tab-timeline" class="tab-content hidden space-y-6">
+                <div class="bg-navy-800/80 border border-slate-700/70 rounded-2xl p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Event Timeline &amp; Action Plan</h3>
+                            <p class="text-xs text-slate-400">Check off tasks as you complete them. High priority items are flagged with "Do Now".</p>
+                        </div>
+                        <span id="completed-count" class="text-xs font-semibold bg-slate-700 text-slate-200 px-3 py-1 rounded-full">0/0 Completed</span>
+                    </div>
+
+                    <div id="timeline-container" class="space-y-8 relative before:absolute before:inset-0 before:left-3 before:w-0.5 before:bg-slate-700/60"></div>
+                </div>
+            </div>
+
+            <!-- TAB 4: VENDOR CHECKLISTS -->
+            <div id="tab-vendors" class="tab-content hidden space-y-6">
+                <div class="bg-navy-800/80 border border-slate-700/70 rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-2">Vendor Interview &amp; Assessment Guides</h3>
+                    <p class="text-xs text-slate-400 mb-6">Essential questions to ask each vendor before signing contracts.</p>
+
+                    <div id="vendors-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                </div>
+            </div>
+
+            <!-- TAB 5: CREATIVE IDEATION -->
+            <div id="tab-ideas" class="tab-content hidden space-y-6">
+                <div class="bg-navy-800/80 border border-slate-700/70 rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-white mb-2">Creative Vision &amp; Concepts</h3>
+                    <p class="text-xs text-slate-400 mb-6">AI-tailored ideas across theme, food &amp; beverage, entertainment, and decor.</p>
+
+                    <div id="ideas-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FLOATING PLAN REFINEMENT BAR (Visible in Dashboard) -->
+    <div id="refinement-bar" class="hidden fixed bottom-4 inset-x-4 max-w-4xl mx-auto z-40 no-print">
+        <form onsubmit="app.handleRefineSubmit(event)" class="bg-navy-800/95 border border-indigo-500/50 rounded-2xl p-2.5 sm:p-3 shadow-2xl backdrop-blur-md flex items-center space-x-2 glow-effect">
+            <div class="pl-2 text-indigo-400">
+                <i class="fa-solid fa-sparkles text-lg"></i>
+            </div>
+            <input type="text" id="refine-input" placeholder="Refine plan... e.g. 'Make it 15% cheaper', 'Focus more on live music', 'Add vegan options'" class="flex-grow bg-transparent border-none text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none px-2">
+            <button type="submit" id="refine-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5 whitespace-nowrap">
+                <span>Refine Plan</span>
+                <i class="fa-solid fa-arrow-up"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/80 bg-navy-900 py-6 text-center text-xs text-slate-500 no-print">
+        <p>GatherMind Event Planning Engine • Built with Deterministic Largest Remainder Allocation</p>
+    </footer>
+
+    <!-- API KEY MODAL -->
+    <div id="api-key-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-navy-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between">
+                <h3 class="text-base font-bold text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-key text-yellow-400"></i>
+                    <span>Gemini API Key Settings</span>
+                </h3>
+                <button onclick="app.closeApiKeyModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Provide a Google Gemini API key to generate live AI plans. If left blank, GatherMind defaults to instant simulated AI generation.
+            </p>
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">API Key</label>
+                <input type="password" id="modal-api-key-input" placeholder="AIzaSy..." class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+            </div>
+            <div class="flex justify-end space-x-2 pt-2">
+                <button onclick="app.clearApiKey()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-xs text-white rounded-xl">Clear Key</button>
+                <button onclick="app.saveApiKey()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-xs text-white font-semibold rounded-xl">Save &amp; Use Key</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        /**
+         * GatherMind (Komorebi AI) Main Controller
+         */
+        const app = {
+            apiKey: localStorage.getItem('gather_gemini_api_key') || '',
+            currentPlan: null,
+            activeTab: 'overview',
+
+            init() {
+                this.updateApiKeyUI();
+                const savedPlan = localStorage.getItem('gather_current_plan');
+                if (savedPlan) {
+                    try {
+                        this.currentPlan = JSON.parse(savedPlan);
+                        this.renderDashboard();
+                        this.showPage('dashboard');
+                    } catch(e) {
+                        console.error('Failed to parse saved plan:', e);
+                        this.showPage('setup');
+                    }
+                } else {
+                    this.showPage('setup');
+                }
+            },
+
+            // --- NAVIGATION ---
+            showPage(page) {
+                document.getElementById('page-setup').classList.toggle('hidden', page !== 'setup');
+                document.getElementById('page-dashboard').classList.toggle('hidden', page !== 'dashboard');
+                document.getElementById('refinement-bar').classList.toggle('hidden', page !== 'dashboard');
+                document.getElementById('nav-dashboard-btn').classList.toggle('hidden', !this.currentPlan);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+
+            switchTab(tabId) {
+                this.activeTab = tabId;
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('border-indigo-500', 'text-indigo-400');
+                    btn.classList.add('border-transparent', 'text-slate-400');
+                });
+
+                document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+                const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+                if(activeBtn) {
+                    activeBtn.classList.add('border-indigo-500', 'text-indigo-400');
+                    activeBtn.classList.remove('border-transparent', 'text-slate-400');
+                }
+            },
+
+            // --- API KEY MODAL ---
+            openApiKeyModal() {
+                document.getElementById('modal-api-key-input').value = this.apiKey;
+                document.getElementById('api-key-modal').classList.remove('hidden');
+            },
+            closeApiKeyModal() {
+                document.getElementById('api-key-modal').classList.add('hidden');
+            },
+            saveApiKey() {
+                const val = document.getElementById('modal-api-key-input').value.trim();
+                this.apiKey = val;
+                if(val) {
+                    localStorage.setItem('gather_gemini_api_key', val);
+                } else {
+                    localStorage.removeItem('gather_gemini_api_key');
+                }
+                this.updateApiKeyUI();
+                this.closeApiKeyModal();
+            },
+            clearApiKey() {
+                this.apiKey = '';
+                localStorage.removeItem('gather_gemini_api_key');
+                document.getElementById('modal-api-key-input').value = '';
+                this.updateApiKeyUI();
+                this.closeApiKeyModal();
+            },
+            updateApiKeyUI() {
+                const label = document.getElementById('api-key-status');
+                const modeLabel = document.getElementById('ai-mode-label');
+                if (this.apiKey) {
+                    if(label) {
+                        label.innerText = "Gemini Key Active";
+                        label.classList.add('text-emerald-400');
+                    }
+                    if(modeLabel) modeLabel.innerText = "Mode: Live Gemini 1.5 AI Key Connected";
+                } else {
+                    if(label) {
+                        label.innerText = "Set Gemini Key";
+                        label.classList.remove('text-emerald-400');
+                    }
+                    if(modeLabel) modeLabel.innerText = "Mode: Simulated AI Generation (Fast & Free)";
+                }
+            },
+
+            // --- QUICK-FILL PRESETS ---
+            loadPreset(type) {
+                const presets = {
+                    wedding: {
+                        type: 'Wedding',
+                        name: "Sophia & Liam\u2019s Sunset Celebration",
+                        date: '2026-10-24',
+                        location: 'Napa Valley, CA',
+                        guests: 150,
+                        budget: 45000,
+                        currency: 'USD',
+                        language: 'English',
+                        vibe: 'Rustic Boho Chic, Romantic Lighting',
+                        priorities: 'Gourmet Organic Dinner, Premium Open Bar, Live Saxophonist'
+                    },
+                    birthday: {
+                        type: 'Birthday Party',
+                        name: "Alex\u2019s 30th Synthwave Odyssey",
+                        date: '2026-11-15',
+                        location: 'Austin, TX',
+                        guests: 40,
+                        budget: 6500,
+                        currency: 'USD',
+                        language: 'English',
+                        vibe: 'Retro 80s Neon, Cyberpunk Arcade',
+                        priorities: 'Custom Arcade Machine Rentals, Signature Cocktails, Craft Pizza Bar'
+                    },
+                    foodfest: {
+                        type: 'Community Festival',
+                        name: 'Harvest & Street Eats Community Gathering',
+                        date: '2026-09-18',
+                        location: 'Portland, OR',
+                        guests: 500,
+                        budget: 18000,
+                        currency: 'USD',
+                        language: 'English',
+                        vibe: 'Vibrant, Eco-Friendly, Family-Friendly',
+                        priorities: 'Local Artisan Food Trucks, Acoustic Stage, Zero-Waste Recycling Station'
+                    }
+                };
+
+                const data = presets[type];
+                if (!data) return;
+
+                document.getElementById('field-type').value = data.type;
+                document.getElementById('field-name').value = data.name;
+                document.getElementById('field-date').value = data.date;
+                document.getElementById('field-location').value = data.location;
+                document.getElementById('field-guests').value = data.guests;
+                document.getElementById('field-budget').value = data.budget;
+                document.getElementById('field-currency').value = data.currency;
+                document.getElementById('field-language').value = data.language;
+                document.getElementById('field-vibe').value = data.vibe;
+                document.getElementById('field-priorities').value = data.priorities;
+            },
+
+            // --- FORM SUBMISSION & AI GENERATION ---
+            async handleFormSubmit(e) {
+                e.preventDefault();
+                const btn = document.getElementById('generate-btn');
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Architecting Event...</span>`;
+
+                const formData = {
+                    type: document.getElementById('field-type').value,
+                    name: document.getElementById('field-name').value,
+                    date: document.getElementById('field-date').value,
+                    location: document.getElementById('field-location').value,
+                    guests: parseInt(document.getElementById('field-guests').value, 10),
+                    budget: parseFloat(document.getElementById('field-budget').value),
+                    currency: document.getElementById('field-currency').value,
+                    language: document.getElementById('field-language').value,
+                    vibe: document.getElementById('field-vibe').value,
+                    priorities: document.getElementById('field-priorities').value
+                };
+
+                let plan = null;
+
+                // 1. Attempt live serverless backend route (/api/plan)
+                try {
+                    const typeMap = {
+                        'Wedding': 'wedding',
+                        'Birthday Party': 'birthday',
+                        'Community Festival': 'community',
+                        'Corporate Gala': 'community',
+                        'Baby Shower': 'birthday',
+                        'Product Launch': 'community'
+                    };
+                    const langMap = {
+                        'English': 'en',
+                        'Spanish': 'es',
+                        'French': 'fr',
+                        'German': 'en',
+                        'Hindi': 'hi'
+                    };
+
+                    const payload = {
+                        eventType: typeMap[formData.type] || 'wedding',
+                        eventName: formData.name,
+                        date: formData.date,
+                        location: formData.location,
+                        guestCount: formData.guests,
+                        budget: formData.budget,
+                        currency: formData.currency,
+                        language: langMap[formData.language] || 'en',
+                        style: formData.vibe || 'Balanced and elegant',
+                        priorities: formData.priorities ? formData.priorities.split(',').map(s => s.trim()).filter(Boolean) : []
+                    };
+
+                    const res = await fetch('/api/plan', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (res.ok) {
+                        const apiData = await res.json();
+                        plan = {
+                            meta: formData,
+                            budgetAllocation: (apiData.budgetCategories || []).map((c, i) => ({
+                                id: 'cat_' + i,
+                                name: c.category,
+                                weight: c.weight,
+                                amount: c.amount
+                            })),
+                            summary: apiData.summary,
+                            prioritiesList: payload.priorities.length ? payload.priorities : ['Curated Quality', 'Guest Experience', 'Zero-Loss Budget'],
+                            savingTips: (apiData.budgetCategories || []).map(c => ({
+                                category: c.category,
+                                tip: c.tips || 'Optimal budget distribution applied.'
+                            })),
+                            timeline: (apiData.timeline || []).map(t => ({
+                                time: `${t.offsetWeeksBefore} Weeks Out`,
+                                task: t.task,
+                                done: false,
+                                urgent: t.offsetWeeksBefore >= 30
+                            })),
+                            vendorQuestions: (apiData.vendors || []).map(v => ({
+                                category: v.category,
+                                questions: (v.checklist || []).map(text => ({ text, checked: false })),
+                                notes: ''
+                            })),
+                            creativeIdeas: [
+                                ...(apiData.ideas?.theme || []).map(title => ({ title, category: 'Theme', description: `Cohesive styling concept: ${title}` })),
+                                ...(apiData.ideas?.foodAndDrink || []).map(title => ({ title, category: 'Food & Drink', description: `Curated menu highlight: ${title}` })),
+                                ...(apiData.ideas?.activities || []).map(title => ({ title, category: 'Activities', description: `Guest entertainment engagement: ${title}` }))
+                            ]
+                        };
+                    }
+                } catch (apiErr) {
+                    console.info('Serverless API not reachable, using fallback:', apiErr.message);
+                }
+
+                // 2. Fallback: Client-Side Gemini Key or Instant Simulation
+                if (!plan) {
+                    if (this.apiKey) {
+                        try {
+                            plan = await this.generateWithGemini(formData);
+                        } catch (err) {
+                            console.warn("Gemini API call failed, falling back to simulator:", err);
+                            plan = this.generateSimulatedPlan(formData);
+                        }
+                    } else {
+                        await new Promise(r => setTimeout(r, 600));
+                        plan = this.generateSimulatedPlan(formData);
+                    }
+                }
+
+                this.currentPlan = plan;
+                this.saveCurrentPlan();
+                this.renderDashboard();
+                this.showPage('dashboard');
+
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i><span>Generate Master Plan</span>`;
+            },
+
+            // --- LARGEST REMAINDER METHOD (DETERMINISTIC ALLOCATION) ---
+            calculateDeterministicBudget(totalBudget, categoryWeights) {
+                const weightSum = categoryWeights.reduce((acc, c) => acc + c.weight, 0);
+                if (weightSum === 0) return categoryWeights.map(c => ({ ...c, amount: 0 }));
+
+                let unroundedAllocations = categoryWeights.map(c => {
+                    const exactAmount = (c.weight / weightSum) * totalBudget;
+                    const floorAmount = Math.floor(exactAmount);
+                    const remainder = exactAmount - floorAmount;
+                    return {
+                        ...c,
+                        exactAmount,
+                        floorAmount,
+                        remainder
+                    };
+                });
+
+                let allocatedSum = unroundedAllocations.reduce((acc, c) => acc + c.floorAmount, 0);
+                let shortfall = totalBudget - allocatedSum;
+
+                let indexed = unroundedAllocations.map((item, index) => ({ index, remainder: item.remainder }));
+                indexed.sort((a, b) => b.remainder - a.remainder);
+
+                for (let i = 0; i < shortfall; i++) {
+                    const targetIdx = indexed[i % indexed.length].index;
+                    unroundedAllocations[targetIdx].floorAmount += 1;
+                }
+
+                return unroundedAllocations.map(c => ({
+                    id: c.id,
+                    name: c.name,
+                    weight: c.weight,
+                    amount: c.floorAmount
+                }));
+            },
+
+            // --- SIMULATED AI GENERATOR ---
+            generateSimulatedPlan(data) {
+                const baseWeights = [
+                    { id: 'venue', name: 'Venue & Infrastructure', weight: 30 },
+                    { id: 'catering', name: 'Food & Catering', weight: 28 },
+                    { id: 'decor', name: 'Decor, Styling & Florals', weight: 15 },
+                    { id: 'entertainment', name: 'Music & Entertainment', weight: 12 },
+                    { id: 'photo', name: 'Photography & Film', weight: 10 },
+                    { id: 'contingency', name: 'Contingency & Misc', weight: 5 }
+                ];
+
+                const allocatedBudget = this.calculateDeterministicBudget(data.budget, baseWeights);
+
+                return {
+                    meta: data,
+                    budgetAllocation: allocatedBudget,
+                    summary: `The plan for ${data.name} is designed around a ${data.vibe || 'curated'} theme for ${data.guests} guests in ${data.location}. With a total budget of ${data.currency} ${data.budget.toLocaleString()}, we have balanced core priorities (${data.priorities || 'high guest comfort'}) through deterministic precision funding.`,
+                    prioritiesList: data.priorities ? data.priorities.split(',').map(s => s.trim()) : ['Guest Comfort', 'Quality Catering', 'Memorable Ambiance'],
+                    savingTips: [
+                        { category: 'Venue & Infrastructure', tip: 'Consider booking on a Friday or Sunday to save up to 20% on rental fees.' },
+                        { category: 'Food & Catering', tip: 'Opt for family-style or interactive stations instead of plated multi-course meals to reduce staffing costs.' },
+                        { category: 'Decor & Florals', tip: 'Repurpose ceremony florals into reception centerpieces to halve floral expenses.' },
+                        { category: 'Music & Entertainment', tip: 'Book a versatile DJ who offers live acoustic sets during cocktail hours.' }
+                    ],
+                    timeline: [
+                        { time: '52 Weeks Out', task: 'Finalize core event theme and budget allocation parameters.', done: false, urgent: true },
+                        { time: '40 Weeks Out', task: 'Secure primary venue and confirm key vendor availability.', done: false, urgent: false },
+                        { time: '26 Weeks Out', task: 'Finalize catering menus, beverage pairings, and tasting sessions.', done: false, urgent: false },
+                        { time: '12 Weeks Out', task: 'Send out formal invitations and open guest RSVP tracking.', done: false, urgent: false },
+                        { time: '4 Weeks Out', task: 'Confirm final guest counts, floor plans, and vendor delivery schedules.', done: false, urgent: false }
+                    ],
+                    vendorQuestions: [
+                        {
+                            category: 'Catering & Beverages',
+                            questions: [
+                                { text: 'Are staff, service charges, and rentals included in the quote?', checked: false },
+                                { text: 'How do you handle dietary restrictions and allergy accommodations?', checked: false }
+                            ],
+                            notes: ''
+                        },
+                        {
+                            category: 'Venue & Event Logistics',
+                            questions: [
+                                { text: 'What is the load-in/load-out curfew and overtime fee schedule?', checked: false },
+                                { text: 'Are there sound volume limits or vendor insurance requirements?', checked: false }
+                            ],
+                            notes: ''
+                        }
+                    ],
+                    creativeIdeas: [
+                        { title: 'Signature Visual Theme', category: 'Theme', description: `Incorporate ${data.vibe || 'modern minimalist'} elements with ambient warm accent lighting.` },
+                        { title: 'Curated Culinary Experience', category: 'Food & Drink', description: 'Interactive artisan tasting stations highlighting seasonal local produce.' },
+                        { title: 'Immersive Guest Activity', category: 'Activities', description: 'Interactive photo/memory booth with digital and instant physical guest keepsakes.' },
+                        { title: 'Atmospheric Styling', category: 'Decor', description: 'Layered textures, custom welcome signage, and sustainable floral installations.' }
+                    ]
+                };
+            },
+
+            // --- GEMINI API CALL ---
+            async generateWithGemini(data) {
+                const prompt = `You are GatherMind AI event planner. Return ONLY valid JSON matching this schema for an event with params: ${JSON.stringify(data)}.
+                Return schema:
+                {
+                   "summary": "string",
+                   "prioritiesList": ["string"],
+                   "budgetWeights": [
+                      {"id": "venue", "name": "Venue & Infrastructure", "weight": number},
+                      {"id": "catering", "name": "Food & Catering", "weight": number},
+                      {"id": "decor", "name": "Decor, Styling & Florals", "weight": number},
+                      {"id": "entertainment", "name": "Music & Entertainment", "weight": number},
+                      {"id": "photo", "name": "Photography & Film", "weight": number},
+                      {"id": "contingency", "name": "Contingency & Misc", "weight": number}
+                   ],
+                   "savingTips": [{"category": "string", "tip": "string"}],
+                   "timeline": [{"time": "string", "task": "string", "done": false, "urgent": boolean}],
+                   "vendorQuestions": [{"category": "string", "questions": [{"text": "string", "checked": false}], "notes": ""}],
+                   "creativeIdeas": [{"title": "string", "category": "string", "description": "string"}]
+                }`;
+
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.apiKey}`;
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseMimeType: "application/json" }
+                    })
+                });
+
+                if (!res.ok) throw new Error("API request failed");
+                const jsonRes = await res.json();
+                const rawText = jsonRes.candidates[0].content.parts[0].text;
+                const parsed = JSON.parse(rawText);
+
+                // Compute deterministic exact budget amounts using Largest Remainder
+                const budgetAlloc = this.calculateDeterministicBudget(data.budget, parsed.budgetWeights);
+
+                return {
+                    meta: data,
+                    budgetAllocation: budgetAlloc,
+                    summary: parsed.summary,
+                    prioritiesList: parsed.prioritiesList || [],
+                    savingTips: parsed.savingTips || [],
+                    timeline: parsed.timeline || [],
+                    vendorQuestions: parsed.vendorQuestions || [],
+                    creativeIdeas: parsed.creativeIdeas || []
+                };
+            },
+
+            // --- REFINEMENT PROMPT SUBMISSION ---
+            async handleRefineSubmit(e) {
+                e.preventDefault();
+                const input = document.getElementById('refine-input');
+                const promptText = input.value.trim();
+                if (!promptText || !this.currentPlan) return;
+
+                const btn = document.getElementById('refine-btn');
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+
+                // Handle natural language budget adjustments directly
+                if (promptText.toLowerCase().includes('cheaper') || promptText.toLowerCase().includes('reduce budget')) {
+                    const match = promptText.match(/\d+/);
+                    const pct = match ? parseInt(match[0], 10) : 10;
+                    this.currentPlan.meta.budget = Math.round(this.currentPlan.meta.budget * (1 - pct / 100));
+                }
+
+                // Recalculate allocations
+                this.currentPlan.budgetAllocation = this.calculateDeterministicBudget(
+                    this.currentPlan.meta.budget,
+                    this.currentPlan.budgetAllocation
+                );
+
+                // Append refinement note to summary
+                this.currentPlan.summary += `\n\n[AI Refinement Applied]: Updated according to request: "${promptText}". Re-balanced financial weights and task schedules.`;
+
+                this.saveCurrentPlan();
+                this.renderDashboard();
+                input.value = '';
+                btn.disabled = false;
+                btn.innerHTML = `<span>Refine Plan</span><i class="fa-solid fa-arrow-up"></i>`;
+            },
+
+            // --- RENDER DASHBOARD UI ---
+            renderDashboard() {
+                const plan = this.currentPlan;
+                if (!plan) return;
+
+                const currencySymbol = { USD: '$', INR: '₹', EUR: '€', GBP: '£', AED: 'AED ' }[plan.meta.currency] || '$';
+
+                // Banner Details
+                document.getElementById('dash-type-badge').innerText = plan.meta.type;
+                document.getElementById('dash-date').innerHTML = `<i class="fa-regular fa-calendar mr-1"></i> ${plan.meta.date}`;
+                document.getElementById('dash-location').innerHTML = `<i class="fa-solid fa-location-dot mr-1"></i> ${plan.meta.location}`;
+                document.getElementById('dash-title').innerText = plan.meta.name;
+                document.getElementById('dash-vibe').innerText = `Style & Vibe: ${plan.meta.vibe || 'Curated'}`;
+
+                // Metrics
+                document.getElementById('metric-budget').innerText = `${currencySymbol}${plan.meta.budget.toLocaleString()}`;
+                const costPerGuest = Math.round(plan.meta.budget / (plan.meta.guests || 1));
+                document.getElementById('metric-cost-per-guest').innerText = `${currencySymbol}${costPerGuest.toLocaleString()}`;
+
+                // Days Left Calculation
+                const daysLeft = Math.max(0, Math.ceil((new Date(plan.meta.date) - new Date()) / (1000 * 60 * 60 * 24)));
+                document.getElementById('metric-days-left').innerText = isNaN(daysLeft) ? 'TBD' : `${daysLeft} Days`;
+
+                // Task Progress
+                const totalTasks = plan.timeline.length;
+                const doneTasks = plan.timeline.filter(t => t.done).length;
+                const progressPct = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
+                document.getElementById('metric-progress-bar').style.width = `${progressPct}%`;
+                document.getElementById('metric-progress-text').innerText = `${progressPct}%`;
+
+                // Overview Tab
+                document.getElementById('summary-text').innerText = plan.summary;
+                const prioritiesContainer = document.getElementById('priorities-container');
+                prioritiesContainer.innerHTML = plan.prioritiesList.map(p => `
+                    <div class="flex items-center space-x-2 text-xs text-slate-200 bg-navy-900/60 p-2 rounded-lg border border-slate-800">
+                        <i class="fa-solid fa-check text-cyan-400"></i>
+                        <span>${p}</span>
+                    </div>
+                `).join('');
+
+                // Render Overview Budget Bars
+                this.renderOverviewBudgetBars(currencySymbol);
+
+                // Render Budget Breakdown Tab with Sliders
+                this.renderBudgetSliders(currencySymbol);
+
+                // Render Saving Tips
+                this.renderSavingTips();
+
+                // Render Timeline
+                this.renderTimeline();
+
+                // Render Vendors
+                this.renderVendors();
+
+                // Render Ideas
+                this.renderIdeas();
+            },
+
+            renderOverviewBudgetBars(currencySymbol) {
+                const container = document.getElementById('overview-budget-bars');
+                const total = this.currentPlan.meta.budget;
+
+                container.innerHTML = this.currentPlan.budgetAllocation.map(item => {
+                    const pct = total > 0 ? ((item.amount / total) * 100).toFixed(1) : 0;
+                    return `
+                        <div>
+                            <div class="flex justify-between text-xs font-semibold mb-1">
+                                <span class="text-slate-300">${item.name}</span>
+                                <span class="text-indigo-300">${currencySymbol}${item.amount.toLocaleString()} (${pct}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-indigo-500 to-cyan-400 h-full rounded-full" style="width: ${pct}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            renderBudgetSliders(currencySymbol) {
+                const container = document.getElementById('budget-sliders-container');
+                const total = this.currentPlan.meta.budget;
+
+                container.innerHTML = this.currentPlan.budgetAllocation.map((item, index) => {
+                    return `
+                        <div class="bg-navy-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-slate-200">${item.name}</span>
+                                <div class="space-x-2">
+                                    <span class="font-mono text-cyan-400 font-bold">${currencySymbol}${item.amount.toLocaleString()}</span>
+                                    <span class="text-slate-400">Weight: ${item.weight}</span>
+                                </div>
+                            </div>
+                            <input type="range" min="1" max="100" value="${item.weight}" oninput="app.updateCategoryWeight(${index}, this.value)" class="w-full accent-indigo-500 bg-slate-800 rounded-lg cursor-pointer h-2">
+                        </div>
+                    `;
+                }).join('');
+
+                const sum = this.currentPlan.budgetAllocation.reduce((acc, c) => acc + c.amount, 0);
+                document.getElementById('budget-sum-check').innerText = `${currencySymbol}${sum.toLocaleString()}`;
+            },
+
+            updateCategoryWeight(index, val) {
+                this.currentPlan.budgetAllocation[index].weight = parseInt(val, 10);
+                this.currentPlan.budgetAllocation = this.calculateDeterministicBudget(
+                    this.currentPlan.meta.budget,
+                    this.currentPlan.budgetAllocation
+                );
+                const currencySymbol = { USD: '$', INR: '₹', EUR: '€', GBP: '£', AED: 'AED ' }[this.currentPlan.meta.currency] || '$';
+                this.renderBudgetSliders(currencySymbol);
+                this.renderOverviewBudgetBars(currencySymbol);
+                this.saveCurrentPlan();
+            },
+
+            renderSavingTips() {
+                const container = document.getElementById('saving-tips-container');
+                container.innerHTML = this.currentPlan.savingTips.map(tip => `
+                    <div class="bg-navy-900/60 p-4 rounded-xl border border-slate-800 space-y-1">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">${tip.category}</span>
+                        <p class="text-xs text-slate-300 leading-relaxed">${tip.tip}</p>
+                    </div>
+                `).join('');
+            },
+
+            renderTimeline() {
+                const container = document.getElementById('timeline-container');
+                const total = this.currentPlan.timeline.length;
+                const done = this.currentPlan.timeline.filter(t => t.done).length;
+                document.getElementById('completed-count').innerText = `${done}/${total} Completed`;
+
+                container.innerHTML = this.currentPlan.timeline.map((item, idx) => `
+                    <div class="relative pl-8 flex items-start justify-between group">
+                        <div class="absolute left-1.5 top-1.5 -translate-x-1/2 w-3 h-3 rounded-full ${item.done ? 'bg-emerald-400 ring-4 ring-emerald-950' : 'bg-indigo-500 ring-4 ring-indigo-950'}"></div>
+                        <div class="space-y-1">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-bold text-indigo-300 uppercase">${item.time}</span>
+                                ${item.urgent ? '<span class="px-2 py-0.5 text-[10px] font-bold bg-rose-950 text-rose-300 border border-rose-800 rounded-full">DO NOW</span>' : ''}
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-200 ${item.done ? 'line-through text-slate-500' : ''}">${item.task}</p>
+                        </div>
+                        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="app.toggleTask(${idx})" class="w-5 h-5 accent-indigo-500 rounded border-slate-700 bg-navy-900 cursor-pointer">
+                    </div>
+                `).join('');
+            },
+
+            toggleTask(idx) {
+                this.currentPlan.timeline[idx].done = !this.currentPlan.timeline[idx].done;
+                this.saveCurrentPlan();
+                this.renderDashboard();
+            },
+
+            renderVendors() {
+                const container = document.getElementById('vendors-container');
+                container.innerHTML = this.currentPlan.vendorQuestions.map((vGroup, gIdx) => `
+                    <div class="bg-navy-900/60 p-5 rounded-xl border border-slate-800 space-y-3">
+                        <h4 class="text-sm font-bold text-indigo-300 flex items-center space-x-2">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                            <span>${vGroup.category}</span>
+                        </h4>
+                        <div class="space-y-2">
+                            ${vGroup.questions.map((q, qIdx) => `
+                                <label class="flex items-start space-x-2.5 cursor-pointer">
+                                    <input type="checkbox" ${q.checked ? 'checked' : ''} onchange="app.toggleVendorQuestion(${gIdx}, ${qIdx})" class="mt-0.5 w-4 h-4 accent-indigo-500 rounded border-slate-700 bg-navy-900">
+                                    <span class="text-xs text-slate-300 ${q.checked ? 'line-through text-slate-500' : ''}">${q.text}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                        <div class="pt-2">
+                            <textarea placeholder="Add custom vendor notes..." onblur="app.updateVendorNotes(${gIdx}, this.value)" class="w-full bg-navy-800 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">${vGroup.notes || ''}</textarea>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            toggleVendorQuestion(gIdx, qIdx) {
+                this.currentPlan.vendorQuestions[gIdx].questions[qIdx].checked = !this.currentPlan.vendorQuestions[gIdx].questions[qIdx].checked;
+                this.saveCurrentPlan();
+            },
+
+            updateVendorNotes(gIdx, val) {
+                this.currentPlan.vendorQuestions[gIdx].notes = val;
+                this.saveCurrentPlan();
+            },
+
+            renderIdeas() {
+                const container = document.getElementById('ideas-container');
+                const icons = {
+                    'Theme': 'fa-palette text-purple-400',
+                    'Food & Drink': 'fa-utensils text-emerald-400',
+                    'Activities': 'fa-gamepad text-cyan-400',
+                    'Decor': 'fa-sparkles text-amber-400'
+                };
+
+                container.innerHTML = this.currentPlan.creativeIdeas.map(idea => `
+                    <div class="bg-navy-900/60 p-5 rounded-xl border border-slate-800 space-y-2 flex flex-col justify-between hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-800 text-slate-300">${idea.category}</span>
+                                <i class="fa-solid ${icons[idea.category] || 'fa-lightbulb text-indigo-400'}"></i>
+                            </div>
+                            <h4 class="text-sm font-bold text-white">${idea.title}</h4>
+                            <p class="text-xs text-slate-300 mt-2 leading-relaxed">${idea.description}</p>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            // --- PERSISTENCE & EXPORT ---
+            saveCurrentPlan() {
+                if (this.currentPlan) {
+                    localStorage.setItem('gather_current_plan', JSON.stringify(this.currentPlan));
+                }
+            },
+
+            exportJson() {
+                if (!this.currentPlan) return;
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.currentPlan, null, 2));
+                const dlAnchor = document.createElement('a');
+                dlAnchor.setAttribute("href", dataStr);
+                dlAnchor.setAttribute("download", `${this.currentPlan.meta.name.replace(/\s+/g, '_')}_Plan.json`);
+                document.body.appendChild(dlAnchor);
+                dlAnchor.click();
+                dlAnchor.remove();
+            },
+
+            resetPlan() {
+                if (confirm("Are you sure you want to reset this plan and create a new event?")) {
+                    localStorage.removeItem('gather_current_plan');
+                    this.currentPlan = null;
+                    this.showPage('setup');
+                }
+            }
+        };
+
+        // Initialize App on DOM Load
+        window.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "gathermind",
+  "version": "1.0.0",
+  "description": "GatherMind – GenAI-powered event planning assistant",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "vercel": "^37.0.0"
+  },
+  "jest": {
+    "transform": {}
+  }
+}

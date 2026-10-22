@@ -75,6 +75,10 @@
         .glow-effect-cyan {
             box-shadow: 0 0 25px -5px rgba(34, 211, 238, 0.25);
         }
+        /* Prevent sticky refinement bar from overlapping content */
+        #page-dashboard {
+            padding-bottom: 130px;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
@@ -176,7 +180,7 @@
                     <!-- Date -->
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">Event Date</label>
-                        <input type="date" id="field-date" required class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500">
+                        <input type="date" id="field-date" required onclick="this.showPicker && this.showPicker()" class="w-full bg-navy-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 cursor-pointer">
                     </div>
 
                     <!-- Location -->
@@ -234,9 +238,10 @@
 
                 <!-- AI Mode Selector & Submit -->
                 <div class="pt-4 border-t border-slate-700/70 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div class="flex items-center space-x-2 text-xs text-slate-400">
-                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <div class="flex items-center space-x-2 text-xs text-slate-400 cursor-pointer hover:text-slate-200 transition" onclick="app.openApiKeyModal()" title="Click to manage Gemini API Key">
+                        <span id="ai-mode-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span id="ai-mode-label">Mode: Simulated AI Generation (Fast &amp; Free)</span>
+                        <i class="fa-solid fa-pen-to-square text-[11px] text-slate-500 hover:text-indigo-400 ml-1"></i>
                     </div>
 
                     <button type="submit" id="generate-btn" class="w-full sm:w-auto bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg glow-effect flex items-center justify-center space-x-2 transition transform active:scale-95">
@@ -248,7 +253,7 @@
         </section>
 
         <!-- ================= PAGE 2: INTERACTIVE DASHBOARD ================= -->
-        <section id="page-dashboard" class="hidden space-y-6">
+        <section id="page-dashboard" class="hidden space-y-6 pb-32">
             
             <!-- Dashboard Top Banner / Overview Summary -->
             <div class="bg-navy-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
@@ -487,6 +492,17 @@
 
             init() {
                 this.updateApiKeyUI();
+
+                // Setup browser-native date input defaults
+                const dateInput = document.getElementById('field-date');
+                if (dateInput && !dateInput.value) {
+                    const today = new Date();
+                    dateInput.min = today.toISOString().split('T')[0];
+                    const defaultDate = new Date();
+                    defaultDate.setMonth(defaultDate.getMonth() + 3);
+                    dateInput.value = defaultDate.toISOString().split('T')[0];
+                }
+
                 const savedPlan = localStorage.getItem('gather_current_plan');
                 if (savedPlan) {
                     try {
@@ -556,18 +572,25 @@
             updateApiKeyUI() {
                 const label = document.getElementById('api-key-status');
                 const modeLabel = document.getElementById('ai-mode-label');
+                const dot = document.getElementById('ai-mode-dot');
                 if (this.apiKey) {
-                    if(label) {
+                    if (label) {
                         label.innerText = "Gemini Key Active";
                         label.classList.add('text-emerald-400');
                     }
-                    if(modeLabel) modeLabel.innerText = "Mode: Live Gemini 1.5 AI Key Connected";
+                    if (modeLabel) {
+                        modeLabel.innerHTML = `<span class="text-emerald-400 font-semibold">Mode: Live Gemini 2.5 Flash Connected</span>`;
+                    }
+                    if (dot) dot.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
                 } else {
-                    if(label) {
+                    if (label) {
                         label.innerText = "Set Gemini Key";
                         label.classList.remove('text-emerald-400');
                     }
-                    if(modeLabel) modeLabel.innerText = "Mode: Simulated AI Generation (Fast & Free)";
+                    if (modeLabel) {
+                        modeLabel.innerHTML = `<span>Mode: Serverless API / Instant AI (Fast &amp; Free)</span>`;
+                    }
+                    if (dot) dot.className = "inline-block w-2.5 h-2.5 rounded-full bg-indigo-400";
                 }
             },
 
@@ -950,12 +973,8 @@
                 const daysLeft = Math.max(0, Math.ceil((new Date(plan.meta.date) - new Date()) / (1000 * 60 * 60 * 24)));
                 document.getElementById('metric-days-left').innerText = isNaN(daysLeft) ? 'TBD' : `${daysLeft} Days`;
 
-                // Task Progress
-                const totalTasks = plan.timeline.length;
-                const doneTasks = plan.timeline.filter(t => t.done).length;
-                const progressPct = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
-                document.getElementById('metric-progress-bar').style.width = `${progressPct}%`;
-                document.getElementById('metric-progress-text').innerText = `${progressPct}%`;
+                // Live Task Progress
+                this.updateProgress();
 
                 // Overview Tab
                 document.getElementById('summary-text').innerText = plan.summary;
@@ -984,6 +1003,36 @@
 
                 // Render Ideas
                 this.renderIdeas();
+            },
+
+            updateProgress() {
+                if (!this.currentPlan) return;
+                const timelineTasks = this.currentPlan.timeline || [];
+                const timelineTotal = timelineTasks.length;
+                const timelineDone = timelineTasks.filter(t => t.done).length;
+
+                let vendorTotal = 0;
+                let vendorDone = 0;
+                (this.currentPlan.vendorQuestions || []).forEach(vg => {
+                    (vg.questions || []).forEach(q => {
+                        vendorTotal++;
+                        if (q.checked) vendorDone++;
+                    });
+                });
+
+                const totalItems = timelineTotal + vendorTotal;
+                const doneItems = timelineDone + vendorDone;
+                const progressPct = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0;
+
+                const bar = document.getElementById('metric-progress-bar');
+                const txt = document.getElementById('metric-progress-text');
+                if (bar) bar.style.width = `${progressPct}%`;
+                if (txt) txt.innerText = `${progressPct}%`;
+
+                const completedCount = document.getElementById('completed-count');
+                if (completedCount) {
+                    completedCount.innerText = `${timelineDone}/${timelineTotal} Completed`;
+                }
             },
 
             renderOverviewBudgetBars(currencySymbol) {
@@ -1016,8 +1065,8 @@
                             <div class="flex justify-between items-center text-xs">
                                 <span class="font-bold text-slate-200">${item.name}</span>
                                 <div class="space-x-2">
-                                    <span class="font-mono text-cyan-400 font-bold">${currencySymbol}${item.amount.toLocaleString()}</span>
-                                    <span class="text-slate-400">Weight: ${item.weight}</span>
+                                    <span id="cat-amt-${index}" class="font-mono text-cyan-400 font-bold">${currencySymbol}${item.amount.toLocaleString()}</span>
+                                    <span id="cat-wt-${index}" class="text-slate-400">Weight: ${item.weight}</span>
                                 </div>
                             </div>
                             <input type="range" min="1" max="100" value="${item.weight}" oninput="app.updateCategoryWeight(${index}, this.value)" class="w-full accent-indigo-500 bg-slate-800 rounded-lg cursor-pointer h-2">
@@ -1030,13 +1079,26 @@
             },
 
             updateCategoryWeight(index, val) {
-                this.currentPlan.budgetAllocation[index].weight = parseInt(val, 10);
+                const newWeight = parseInt(val, 10);
+                this.currentPlan.budgetAllocation[index].weight = newWeight;
                 this.currentPlan.budgetAllocation = this.calculateDeterministicBudget(
                     this.currentPlan.meta.budget,
                     this.currentPlan.budgetAllocation
                 );
                 const currencySymbol = { USD: '$', INR: '₹', EUR: '€', GBP: '£', AED: 'AED ' }[this.currentPlan.meta.currency] || '$';
-                this.renderBudgetSliders(currencySymbol);
+
+                // Real-time update of live amounts and labels without re-rendering slider inputs during drag
+                this.currentPlan.budgetAllocation.forEach((item, i) => {
+                    const amtEl = document.getElementById(`cat-amt-${i}`);
+                    const wtEl = document.getElementById(`cat-wt-${i}`);
+                    if (amtEl) amtEl.innerText = `${currencySymbol}${item.amount.toLocaleString()}`;
+                    if (wtEl) wtEl.innerText = `Weight: ${item.weight}`;
+                });
+
+                const sum = this.currentPlan.budgetAllocation.reduce((acc, c) => acc + c.amount, 0);
+                const sumCheck = document.getElementById('budget-sum-check');
+                if (sumCheck) sumCheck.innerText = `${currencySymbol}${sum.toLocaleString()}`;
+
                 this.renderOverviewBudgetBars(currencySymbol);
                 this.saveCurrentPlan();
             },
@@ -1055,7 +1117,8 @@
                 const container = document.getElementById('timeline-container');
                 const total = this.currentPlan.timeline.length;
                 const done = this.currentPlan.timeline.filter(t => t.done).length;
-                document.getElementById('completed-count').innerText = `${done}/${total} Completed`;
+                const completedCount = document.getElementById('completed-count');
+                if (completedCount) completedCount.innerText = `${done}/${total} Completed`;
 
                 container.innerHTML = this.currentPlan.timeline.map((item, idx) => `
                     <div class="relative pl-8 flex items-start justify-between group">
@@ -1073,9 +1136,11 @@
             },
 
             toggleTask(idx) {
+                if (!this.currentPlan || !this.currentPlan.timeline[idx]) return;
                 this.currentPlan.timeline[idx].done = !this.currentPlan.timeline[idx].done;
                 this.saveCurrentPlan();
-                this.renderDashboard();
+                this.updateProgress();
+                this.renderTimeline();
             },
 
             renderVendors() {
@@ -1095,20 +1160,24 @@
                             `).join('')}
                         </div>
                         <div class="pt-2">
-                            <textarea placeholder="Add custom vendor notes..." onblur="app.updateVendorNotes(${gIdx}, this.value)" class="w-full bg-navy-800 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">${vGroup.notes || ''}</textarea>
+                            <textarea placeholder="Add custom vendor notes..." oninput="app.updateVendorNotes(${gIdx}, this.value)" class="w-full bg-navy-800 border border-slate-700 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">${vGroup.notes || ''}</textarea>
                         </div>
                     </div>
                 `).join('');
             },
 
             toggleVendorQuestion(gIdx, qIdx) {
+                if (!this.currentPlan || !this.currentPlan.vendorQuestions[gIdx]?.questions[qIdx]) return;
                 this.currentPlan.vendorQuestions[gIdx].questions[qIdx].checked = !this.currentPlan.vendorQuestions[gIdx].questions[qIdx].checked;
                 this.saveCurrentPlan();
+                this.updateProgress();
             },
 
             updateVendorNotes(gIdx, val) {
-                this.currentPlan.vendorQuestions[gIdx].notes = val;
-                this.saveCurrentPlan();
+                if (this.currentPlan && this.currentPlan.vendorQuestions && this.currentPlan.vendorQuestions[gIdx]) {
+                    this.currentPlan.vendorQuestions[gIdx].notes = val;
+                    this.saveCurrentPlan();
+                }
             },
 
             renderIdeas() {

@@ -4,16 +4,18 @@
 
 ### **The Intelligent, Zero-Drift GenAI Event Planning Assistant**
 
-[![Live App](https://img.shields.sh/badge/🚀_Live_App-gathermind.vercel.app-brightgreen?style=for-the-badge&logo=vercel)](https://gathermind.vercel.app) 
-[![Gemini 2.5 Flash](https://img.shields.sh/badge/AI-Google_Gemini_2.5_Flash-blue?style=for-the-badge&logo=google)](https://ai.google.dev) 
-[![Vercel Serverless](https://img.shields.sh/badge/Backend-Vercel_Serverless-black?style=for-the-badge&logo=vercel)](https://vercel.com) 
-[![License: MIT](https://img.shields.sh/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![Live App](https://img.shields.io/badge/Live-gathermind.vercel.app-brightgreen)](https://gathermind.vercel.app)
+[![Gemini 2.5 Flash](https://img.shields.io/badge/AI-Google_Gemini_2.5_Flash-blue)](https://ai.google.dev)
+[![Vercel Serverless](https://img.shields.io/badge/Backend-Vercel_Serverless-black)](https://vercel.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 *Design precision budgets, dynamic timelines, vendor evaluation checklists, and culturally rich creative concepts for weddings, birthday parties, and community festivals in seconds.*
 
 </div>
 
 ---
+
+
 
 ## ✨ Visual Overview & Architecture
 

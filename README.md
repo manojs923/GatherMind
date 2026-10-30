@@ -1,13 +1,33 @@
-# 🌲 GatherMind — GenAI Event Planning Assistant
+<div align="center">
 
-> An AI-powered event planning web application that designs precision budgets, dynamic timelines, vendor evaluation checklists, and creative concepts for weddings, birthday parties, and community festivals.
+# 🌲 GatherMind
 
-[![Live App](https://img.shields.sh/badge/Live-gathermind.vercel.app-brightgreen)](https://gathermind.vercel.app)
-[![Node](https://img.shields.sh/badge/Node.js-20+-blue)](https://nodejs.org)
-[![Vercel](https://img.shields.sh/badge/Serverless-Vercel-black)](https://vercel.com)
-[![License: MIT](https://img.shields.sh/badge/License-MIT-yellow.svg)](LICENSE)
+### **The Intelligent, Zero-Drift GenAI Event Planning Assistant**
+
+[![Live App](https://img.shields.io/badge/🚀_Live_App-gathermind.vercel.app-brightgreen?style=for-the-badge&logo=vercel)](https://gathermind.vercel.app)
+[![Gemini 2.5 Flash](https://img.shields.io/badge/AI-Google_Gemini_2.5_Flash-blue?style=for-the-badge&logo=google)](https://ai.google.dev)
+[![Vercel Serverless](https://img.shields.io/badge/Backend-Vercel_Serverless-black?style=for-the-badge&logo=vercel)](https://vercel.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+
+*Design precision budgets, dynamic timelines, vendor evaluation checklists, and culturally rich creative concepts for weddings, birthday parties, and community festivals in seconds.*
+
+</div>
 
 ---
+
+## ✨ Visual Overview & Architecture
+
+> **Interactive Experience:** GatherMind provides a seamless single-page application (SPA) experience divided into 5 dedicated analytical and creative views.
+
+```mermaid
+graph TD
+    A[User Input & Event Archetype] -->|Secure Serverless API| B(Google Gemini 2.5 Flash)
+    B -->|Strict JSON Schema & Zod Validation| C{Deterministic Engine}
+    C -->|Largest Remainder Math| D[1. Executive Overview]
+    C -->|Live Weight Sliders| E[2. Budget Engine]
+    C -->|Date Offset Calculation| F[3. Milestone Timeline]
+    C -->|Interview Scratchpads| G[4. Vendor Checklists]
+    C -->|Culturally Aware Concepts| H[5. Creative Ideation]
 
 ## 🌟 Key Features
 
